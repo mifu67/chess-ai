@@ -5,31 +5,29 @@ import chess
 def main():
     board = Chessboard()
     # get the player's color
-    agent_index = 0
-    opp_index = 1
-    val = input("Welcome to chess! Press '0' for white and '1' for black. ")
+    white = True
+    black = False
+    val = input("Welcome to chess! Type 'white' to play white and 'black' to play black. ")
     while True:
-        if val == '0': 
-            print("Okay, you have the white pieces! ")
+        if val == 'white': 
+            print("Okay, you have the white pieces!")
             break
-        elif val == '1':
-            print("Okay, you have the black pieces! ")
-            agent_index = 1
-            opp_index = 0
+        elif val == 'black':
+            print("Okay, you have the black pieces!")
+            white = False
+            black = True
             break
         else:
-            val = input("Invalid input: please type '0' or '1'. ")
+            val = input("Invalid input: please type 'white' or 'black'. ")
     print("")
     board.display()
 
-    # doesn't currently handle checkmate
+    # off to the races! 
     while True:
-        if agent_index == 0:
-            board.move(is_player=True)
-            board.move(is_player=False)
-        else:
-            board.move(is_player=False) 
-            board.move(is_player=True)
+        board.move(white)
+        if board.is_end(): break
+        board.move(black)
+        if board.is_end(): break
 
 if __name__ == "__main__":
     main()
