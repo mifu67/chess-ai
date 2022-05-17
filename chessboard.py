@@ -1,4 +1,5 @@
 import chess
+import random
 
 PIECES = {
     "pawn": chess.PAWN,
@@ -28,7 +29,12 @@ class Chessboard:
                 print("Illegal move! Please try again.")
                 move = self.get_move()
             self.board.push(move)
-        # else: minimax! Joseph's code here
+        else:
+            # Joseph: your minimax will go here
+            move_list = list(legal_moves)
+            move = random.choice(move_list)
+            self.board.push(move)
+            print("Computer makes move:", move)
         self.display()
 
     # doesn't handle promotions yet... I think? It might 

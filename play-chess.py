@@ -26,9 +26,9 @@ def main():
     while True:
         if agent_index == 0:
             board.move(is_player=True)
-            board.move(is_player=True) # this will be false but I'm moving both sides for debugging purposes
+            board.move(is_player=False)
         else:
-            board.move(is_player=True) # this will be false but I'm moving both sides for debugging purposes
+            board.move(is_player=False) 
             board.move(is_player=True)
 
 if __name__ == "__main__":
