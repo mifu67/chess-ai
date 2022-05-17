@@ -3,6 +3,7 @@ import chess
 
 # the chess game lives here
 def main():
+    board = Chessboard()
     # get the player's color
     agent_index = 0
     opp_index = 1
@@ -19,9 +20,16 @@ def main():
         else:
             val = input("Invalid input: please type '0' or '1'. ")
     print("")
-    board = chess.Board()
-    print(board)
-    
+    board.display()
+
+    # doesn't currently handle checkmate
+    while True:
+        if agent_index == 0:
+            board.move(is_player=True)
+            board.move(is_player=True) # this will be false but I'm moving both sides for debugging purposes
+        else:
+            board.move(is_player=True) # this will be false but I'm moving both sides for debugging purposes
+            board.move(is_player=True)
 
 if __name__ == "__main__":
     main()
