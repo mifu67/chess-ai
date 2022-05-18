@@ -27,17 +27,17 @@ class Chessboard:
     # make a move:
     def move(self, is_player):
         legal_moves = self.board.legal_moves
+
+        # Print number of remaining pieces for color
+        evaluationFunction = Eval(self.board)
+        x = "White" if self.board.turn == chess.WHITE else "Black"
+        print("Number of Pieces for " + x + ": ", str(evaluationFunction.simple_eval(self.board.turn)))
+
         if is_player:
             move = self.get_move()
             self.board.push(move)
         else:
             # Joseph: your minimax will go here
-
-            evaluationFunction = Eval(self.board)
-            x = "White" if self.board.turn == chess.WHITE else "Black"
-            print("Number of Pieces for " + x)
-            print(evaluationFunction.simple_eval(chess.BLACK))
-
 
             move_list = list(legal_moves)
             move = random.choice(move_list)
@@ -48,13 +48,6 @@ class Chessboard:
     # doesn't handle promotions yet... I think? It might 
     def get_move(self):
         # get a move
-
-        # Print number pieces from eval, test simple_eval
-        
-        evaluationFunction = Eval(self.board)
-        x = "White" if self.board.turn == chess.WHITE else "Black"
-        print("Number of Pieces for " + x)
-        print(evaluationFunction.simple_eval(self.board.turn))
 
         move_input = input("Please enter your move in standard algebraic notation. Type 'help' for examples: ")
         if move_input.strip() == "help":
