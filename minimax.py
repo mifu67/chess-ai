@@ -3,17 +3,29 @@ from eval import Eval
 
 # todo: potentially add board? 
 # minimax agent with alpha-beta pruning
+
+#computer is 0, player is 1
 class MinimaxAgent():
     
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
     def get_move(self, board):
-        def alphaBeta(board, currPlay, currDepth, alpha, beta):
+
+        def alphaBeta(board, currPlayer, currDepth, alpha, beta):
             legalMoves = board.legal_moves
+
+            #if loss neg infinity, if win, infinity
 
             if currDepth == 0:
                 return self.evaluationFunction(board)
+
+            #the computer aims to maximize
+            if currPlayer = "computer":
+
+            #the human aims to minimize
+            if currPlayer = "human":
+
 
             # this needs to change
             nextDepth = currDepth - 1 if currPlayer == "black" else currDepth
@@ -41,4 +53,7 @@ class MinimaxAgent():
                 maxValue = value
                 alpha = max(alpha, maxValue)
         # print("alpha-beta value:", maxValue)
-        return maxAction
+
+
+
+        return action
