@@ -4,22 +4,31 @@ from eval import Eval
 # todo: potentially add board? 
 # minimax agent with alpha-beta pruning
 class MinimaxAgent():
-    
+
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
+    def __init__(self):
+        self.isComputer = True
+        self.evaluation_function = lambda: 1
+
     def get_move(self, board):
-        def alphaBeta(board, currPlay, currDepth, alpha, beta):
+        def alphaBeta(board, isComputer, currDepth, alpha, beta):
             legalMoves = board.legal_moves
 
             if currDepth == 0:
-                return self.evaluationFunction(board)
+                return self.evaluation_function(board)
 
-            # this needs to change
-            nextDepth = currDepth - 1 if currPlayer == "black" else currDepth
+            if self.isComputer:
+                maxValue = -math.inf
+                for action in legalMoves:
+                    succ = gameState.generateSuccessor(currIndex, action)
+                    maxValue = max(maxValue, alphaBeta(succ, nextIndex, nextDepth, alpha, beta))
+                    if maxValue >= beta:
+                        break
+                    alpha = max(alpha, maxValue)
+                return maxValue
 
-    
-        
             minValue = math.inf
             for action in legalMoves:
                 succ = gameState.generateSuccessor(currIndex, action)
@@ -35,7 +44,7 @@ class MinimaxAgent():
         alpha = -math.inf
         beta = math.inf
         for action in legalMoves:
-            value = alphaBeta(gameState.generateSuccessor(self.index, action), self.index + 1, self.depth, alpha, beta)
+            value = alphaBeta(gameState.generateSuccessor(self.index, action), self.isComputer, self.depth, alpha, beta)
             if value > maxValue:
                 maxAction = action
                 maxValue = value
