@@ -1,6 +1,6 @@
-from ast import expr_context
 import chess
 import random
+from minimax import MinimaxAgent
 
 PIECES = {
     "pawn": chess.PAWN,
