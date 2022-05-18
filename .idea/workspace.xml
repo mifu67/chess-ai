@@ -4,6 +4,7 @@
     <list default="true" id="1d6fc220-86cd-453d-80c8-60fd794036db" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chessboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/chessboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/eval.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/minimax.py" beforeDir="false" afterPath="$PROJECT_DIR$/minimax.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,7 +39,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.play-chess">
+  <component name="RunManager" selected="Python.minimax">
     <configuration name="minimax" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="chess-ai" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -83,8 +84,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.play-chess" />
         <item itemvalue="Python.minimax" />
+        <item itemvalue="Python.play-chess" />
       </list>
     </recent_temporary>
   </component>
