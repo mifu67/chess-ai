@@ -32,10 +32,15 @@ class Chessboard:
             self.board.push(move)
         else:
             # Joseph: your minimax will go here
+            move = get_move(self.board)
+            print("Computer makes move:", self.board.san(move))
+            self.board.push(move)
+            """
             move_list = list(legal_moves)
             move = random.choice(move_list)
             print("Computer makes move:", self.board.san(move))
             self.board.push(move)
+            """
         self.display()
 
     # doesn't handle promotions yet... I think? It might 
