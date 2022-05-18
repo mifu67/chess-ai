@@ -1,6 +1,6 @@
-from ast import expr_context
 import chess
 import random
+from minimax import MinimaxAgent
 
 PIECES = {
     "pawn": chess.PAWN,
@@ -17,6 +17,7 @@ class Chessboard:
     def __init__(self):
         self.player_index = 0
         self.board = chess.Board()
+        self.minimaxagent = MinimaxAgent()
     
     # print out the board
     def display(self):

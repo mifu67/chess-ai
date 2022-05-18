@@ -1,6 +1,7 @@
 from chessboard import Chessboard
 import chess
 
+
 # the chess game lives here
 def main():
     board = Chessboard()
