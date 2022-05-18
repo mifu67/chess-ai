@@ -10,17 +10,18 @@ class MinimaxAgent():
     """
     def __init__(self):
         self.isComputer = True
+        #todo figure out a way to grab the player's color
         self.playerColor = chess.WHITE
-        self.evaluation_function = Eval.simple_eval(self, chess.WHITE)
+        #self.evaluation_function = Eval.simple_eval(self, chess.WHITE)
 
     def get_move(self, board):
         def alphaBeta(board, isComputer, currDepth, alpha, beta):
-            if board.is_end():
-                return self.evaluation_function(board)
+            #todo figure out a way to check if chessboard is at the end
+            if Chessboard.is_end():
+                return Eval.evaluation_function(board, self.playerColor)
             elif currDepth == 0:
-                return self.evaluation_function(board)
+                return Eval.evaluation_function(board, self.playerColor)
             else:
-
                 legalMoves = board.legal_moves
                 if self.isComputer:
                     policy = ""
@@ -35,7 +36,6 @@ class MinimaxAgent():
                             return (value, policy)
                     #return the value and policy for the computer
                     return (value, policy)
-
                 else:
                     policy = ""
                     minValue = math.inf
