@@ -1,7 +1,7 @@
 import chess
 from eval import Eval
 
-# todo: potentially add board? 
+# todo: potentially add board?
 # minimax agent with alpha-beta pruning
 
 #computer is 0, player is 1
@@ -15,51 +15,43 @@ class MinimaxAgent():
         self.evaluation_function = lambda: 1
 
     def get_move(self, board):
-
-
-        def alphaBeta(board, currPlayer, currDepth, alpha, beta):
-
+        def alphaBeta(board, isComputer, currDepth, alpha, beta):
+            if board.is_end():
+                return self.evaluation_function(board)
+            elif currDepth == 0:
+                return self.evaluation_function(board)
+            else:
 
             legalMoves = board.legal_moves
-
-            #if loss neg infinity, if win, infinity
-
-            if currDepth == 0:
-                return self.evaluation_function(board)
-
             if self.isComputer:
+                policy = ""
                 maxValue = -math.inf
                 for action in legalMoves:
-                    succ = gameState.generateSuccessor(currIndex, action)
-                    maxValue = max(maxValue, alphaBeta(succ, nextIndex, nextDepth, alpha, beta))
-                    if maxValue >= beta:
-                        break
-                    alpha = max(alpha, maxValue)
-                return maxValue
+                    consideredValue = alphaBeta(board.generateSuccessor(0, action), not isComputer, currDepth, alpha, beta)
+                    if consideredValue > maxValue:
+                        value = consideredValue
+                        policy = action
+                    alpha = max(alpha, value)
+                    if beta <= alpha:
+                        return (value, policy)
+                #return the value and policy for the computer
+                return (value, policy)
 
+            else:
+                policy = ""
+                minValue = math.inf
+                for action in legalMoves:
+                    consideredValue = alphaBeta(board.generateSuccessor(1, action), not isComputer, currDepth, alpha,beta)
+                    if consideredValue < minValue:
+                        value = consideredValue
+                        policy = action
+                    beta = min(beta, value)
+                    if beta <= alpha:
+                        return (value, policy)
+                # return the value and policy for the player
+                return (value, policy)
 
-            minValue = math.inf
-            for action in legalMoves:
-                succ = gameState.generateSuccessor(currIndex, action)
-                minValue = min(minValue, alphaBeta(succ, nextIndex, nextDepth, alpha, beta))
-                if minValue <= alpha:
-                    break
-                beta = min(beta, minValue)
-            return minValue
-
-        legalMoves = gameState.getLegalActions(self.index)
-        maxAction = ""
-        maxValue = -math.inf
-        alpha = -math.inf
-        beta = math.inf
-        for action in legalMoves:
-            value = alphaBeta(gameState.generateSuccessor(self.index, action), self.isComputer, self.depth, alpha, beta)
-            if value > maxValue:
-                maxAction = action
-                maxValue = value
-                alpha = max(alpha, maxValue)
-        # print("alpha-beta value:", maxValue)
-
-
-
+        depth = 3
+        value, action = alphaBeta(board, isComputer = True, depth, -float("inf"), float("inf"))
+        print(value)
         return action
