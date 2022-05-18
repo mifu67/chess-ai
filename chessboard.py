@@ -31,7 +31,7 @@ class Chessboard:
         # Print number of remaining pieces for color
         evaluationFunction = Eval(self.board)
         x = "White" if self.board.turn == chess.WHITE else "Black"
-        print("Number of Pieces for " + x + ": ", str(evaluationFunction.simple_eval(self.board.turn)))
+        print("Weight of Pieces for " + x + ": ", str(evaluationFunction.simple_eval(self.board.turn)))
 
         if is_player:
             move = self.get_move()

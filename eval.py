@@ -13,7 +13,8 @@ PIECES = [
 class Eval():
     def __init__(self, input_board):
         self.board = input_board
-        self.pieces_weights = [1, 1, 1, 1, 1, 1]
+        # Weighted according to chess.com
+        self.pieces_weights = [1, 3, 3, 5, 9, 1]
     
     # Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
     def simple_eval(self, player_color):
