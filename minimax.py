@@ -6,32 +6,38 @@ from eval import Eval
 
 #computer is 0, player is 1
 class MinimaxAgent():
-    
+
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
+    def __init__(self):
+        self.isComputer = True
+        self.evaluation_function = lambda: 1
+
     def get_move(self, board):
 
+
         def alphaBeta(board, currPlayer, currDepth, alpha, beta):
+
+
             legalMoves = board.legal_moves
 
             #if loss neg infinity, if win, infinity
 
             if currDepth == 0:
-                return self.evaluationFunction(board)
+                return self.evaluation_function(board)
 
-            #the computer aims to maximize
-            if currPlayer = "computer":
+            if self.isComputer:
+                maxValue = -math.inf
+                for action in legalMoves:
+                    succ = gameState.generateSuccessor(currIndex, action)
+                    maxValue = max(maxValue, alphaBeta(succ, nextIndex, nextDepth, alpha, beta))
+                    if maxValue >= beta:
+                        break
+                    alpha = max(alpha, maxValue)
+                return maxValue
 
-            #the human aims to minimize
-            if currPlayer = "human":
 
-
-            # this needs to change
-            nextDepth = currDepth - 1 if currPlayer == "black" else currDepth
-
-    
-        
             minValue = math.inf
             for action in legalMoves:
                 succ = gameState.generateSuccessor(currIndex, action)
@@ -47,7 +53,7 @@ class MinimaxAgent():
         alpha = -math.inf
         beta = math.inf
         for action in legalMoves:
-            value = alphaBeta(gameState.generateSuccessor(self.index, action), self.index + 1, self.depth, alpha, beta)
+            value = alphaBeta(gameState.generateSuccessor(self.index, action), self.isComputer, self.depth, alpha, beta)
             if value > maxValue:
                 maxAction = action
                 maxValue = value
