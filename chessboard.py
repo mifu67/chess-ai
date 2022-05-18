@@ -1,6 +1,7 @@
 import chess
 import random
 from minimax import MinimaxAgent
+from eval import Eval
 
 PIECES = {
     "pawn": chess.PAWN,
@@ -31,6 +32,13 @@ class Chessboard:
             self.board.push(move)
         else:
             # Joseph: your minimax will go here
+
+            evaluationFunction = Eval(self.board)
+            x = "White" if self.board.turn == chess.WHITE else "Black"
+            print("Number of Pieces for " + x)
+            print(evaluationFunction.simple_eval(chess.BLACK))
+
+
             move_list = list(legal_moves)
             move = random.choice(move_list)
             print("Computer makes move:", self.board.san(move))
@@ -40,6 +48,14 @@ class Chessboard:
     # doesn't handle promotions yet... I think? It might 
     def get_move(self):
         # get a move
+
+        # Print number pieces from eval, test simple_eval
+        
+        evaluationFunction = Eval(self.board)
+        x = "White" if self.board.turn == chess.WHITE else "Black"
+        print("Number of Pieces for " + x)
+        print(evaluationFunction.simple_eval(self.board.turn))
+
         move_input = input("Please enter your move in standard algebraic notation. Type 'help' for examples: ")
         if move_input.strip() == "help":
             print("e4, Nf3, Qxb4, bxc6, 0-0, Nfd2")
