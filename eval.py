@@ -84,11 +84,14 @@ flip = [
 
 class Eval:
 
+
     def __init__(self, input_board):
         self.board = input_board
 
         self.mobility_weight = 5
         self.check_weight = -10000
+
+
 
     # Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
     def simple_eval(self, player_color):
@@ -154,4 +157,6 @@ class Eval:
 
     def combined_eval(self, player_color):
         return self.symm_eval(player_color) + self.placement_eval(player_color)
+ 
+
 
