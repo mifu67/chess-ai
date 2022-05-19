@@ -32,6 +32,8 @@ class MinimaxAgent:
 
             # we've bottomed out, so call the eval function
             elif currDepth == 0:
+                #print("depth = 0")
+                #print("self.evals.simple_eval(self.player_color)", self.evals.simple_eval(self.player_color))
                 return self.evals.simple_eval(self.player_color)
             
             # minimax
@@ -42,7 +44,7 @@ class MinimaxAgent:
                     for action in legalMoves:
                         # print("Move:", board.san(action))
                         board.push(action)
-                        value = alphaBeta(board, not isComputer, currDepth, alpha, beta)
+                        value = alphaBeta(board, not isComputer, currDepth - 1, alpha, beta)
                         # print("max considered:", value)
                         board.pop()
                         # print("Board after pop max:")
@@ -51,6 +53,7 @@ class MinimaxAgent:
                         if maxValue >= beta:
                             break
                         alpha = max(alpha, maxValue)
+                        #print("alpha ", alpha)
                     return maxValue
                 else:
                     minValue = math.inf
@@ -66,8 +69,10 @@ class MinimaxAgent:
                         if minValue <= alpha:
                             break
                         beta = min(beta, minValue)
+                        #print("beta ", beta)
                     return minValue
 
+        #beginning of get_moves
         legalMoves = self.board.legal_moves
         maxAction = ""
         maxValue = -math.inf
@@ -78,5 +83,11 @@ class MinimaxAgent:
             if value > maxValue:
                 maxAction = action
                 maxValue = value
+                if alpha == float("inf"):
+                    print("infinite alpha found")
+                print("alpha before",  alpha)
                 alpha = max(alpha, maxValue)
+                print("alpha", alpha)
+
+        print("maxValue ", maxValue)
         return maxAction
