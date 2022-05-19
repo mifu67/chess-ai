@@ -9,7 +9,7 @@ class MinimaxAgent:
     """
     def __init__(self, player_color, board):
         # setting an arbitrary number for testing
-        self.depth = 3
+        self.depth = 2
         self.board = board
         self.isComputer = True
         self.player_color = player_color
