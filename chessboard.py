@@ -29,6 +29,9 @@ class Chessboard:
     # make a move:
     def move(self, is_player):
 
+        eval = Eval(self.board)
+        print("Board Score = " + str(eval.placement_eval(self.board.turn)))
+
         if is_player:
             move = self.get_move()
             self.board.push(move)
