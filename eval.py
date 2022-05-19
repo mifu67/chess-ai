@@ -9,6 +9,8 @@ PIECES = [
     chess.KING
 ]
 
+PIECES_WEIGHTS = [100, 280, 320, 479, 929, 60000]
+
 pst_pawn = [0,   0,   0,   0,   0,   0,   0,   0,
             78,  83,  86,  73, 102,  82,  85,  90,
              7,  29,  21,  44,  40,  31,  44,   7,
@@ -85,8 +87,7 @@ class Eval:
 
     def __init__(self, input_board):
         self.board = input_board
-        # Weighted according to chess.com
-        self.pieces_weights = [10, 30, 30, 50, 90, 900]
+    
         self.mobility_weight = 5
         self.check_weight = -10000
 
@@ -96,8 +97,8 @@ class Eval:
         my_count = 0
         opp_count = 0
         for i in range(len(PIECES)):
-            my_count += self.pieces_weights[i] * len(self.board.pieces(PIECES[i], player_color))
-            opp_count += self.pieces_weights[i] * len(self.board.pieces(PIECES[i], not player_color))
+            my_count += PIECES_WEIGHTS * len(self.board.pieces(PIECES[i], player_color))
+            opp_count += PIECES_WEIGHTS * len(self.board.pieces(PIECES[i], not player_color))
         return my_count - opp_count
 
     # Based on Claude E. Shannon's "Programming a Computer for playing Chess" 1949
@@ -105,7 +106,7 @@ class Eval:
         # Count difference
         score = 0
         for i in range(len(PIECES)):
-            score += self.pieces_weights[i] * (len(self.board.pieces(PIECES[i], player_color)) - 
+            score += PIECES_WEIGHTS * (len(self.board.pieces(PIECES[i], player_color)) - 
                                                 len(self.board.pieces(PIECES[i], not player_color)))
         # Mobility measured by number of legal moves available
         mobility = self.mobility_weight * (len(self.board.legal_moves))
@@ -150,10 +151,11 @@ class Eval:
                     score -= pst_queen[flip[i]]
                 elif piece == chess.KING:
                     score -= pst_king[flip[i]]
-                    
+
         return score if (player_color == chess.WHITE) else -score
 
-        
+    def combined_eval(self, player_color):
+        return self.symm_eval(player_color) + self.placement_eval(player_color)
 
 
 
