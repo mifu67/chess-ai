@@ -9,7 +9,7 @@ class MinimaxAgent:
     """
     def __init__(self, player_color, board):
         # setting an arbitrary number for testing
-        self.depth = 2
+        self.depth = 3
         self.board = board
         self.isComputer = True
         self.player_color = player_color
@@ -32,7 +32,6 @@ class MinimaxAgent:
 
             # we've bottomed out, so call the eval function
             elif currDepth == 0:
-                # print("evaluation:", self.evals.simple_eval(self.player_color))
                 return self.evals.simple_eval(self.player_color)
             
             # minimax
@@ -51,6 +50,7 @@ class MinimaxAgent:
                         value = max(maxValue, value)
                         if maxValue >= beta:
                             break
+                        alpha = max(alpha, maxValue)
                     return maxValue
                 else:
                     minValue = math.inf
