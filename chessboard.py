@@ -18,6 +18,7 @@ class Chessboard:
     def __init__(self):
         self.player_index = 0
         self.board = chess.Board()
+        self.minimaxagent = MinimaxAgent()
     
     # print out the board
     def display(self):
@@ -39,10 +40,16 @@ class Chessboard:
         else:
             # Joseph: your minimax will go here
 
+            move = MinimaxAgent.get_move(self, board= self.board)
+            print("Computer makes move:", self.board.san(move))
+            self.board.push(move)
+            """
+
             move_list = list(legal_moves)
             move = random.choice(move_list)
             print("Computer makes move:", self.board.san(move))
             self.board.push(move)
+            """
         self.display()
 
     # doesn't handle promotions yet... I think? It might 
