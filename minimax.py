@@ -30,6 +30,7 @@ class MinimaxAgent:
 
             # we've bottomed out, so call the eval function
             elif currDepth == 0:
+                print("Eval:", self.evals.simple_eval(self.player_color))
                 return self.evals.simple_eval(self.player_color)
             
             # minimax
