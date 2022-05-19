@@ -15,24 +15,19 @@ PIECES = {
 # Joseph: you may want to make a minimax class, in which case you would pass it in here
 # Daniela: we may want to make an eval class from which we can pull eval functions?
 class Chessboard:
-    def __init__(self):
-        self.player_index = 0
+    def __init__(self, player_color):
         self.board = chess.Board()
-        self.minimaxagent = MinimaxAgent()
+        self.minimaxagent = MinimaxAgent(player_color, self.board)
+        self.player_color = player_color
     
     # print out the board
     def display(self):
         print(self.board)
         print("")
+        
 
     # make a move:
     def move(self, is_player):
-        legal_moves = self.board.legal_moves
-
-        # Print number of remaining pieces for color
-        evaluationFunction = Eval(self.board)
-        x = "White" if self.board.turn == chess.WHITE else "Black"
-        print("Weight of Pieces for " + x + ": ", str(evaluationFunction.simple_eval(self.board.turn)))
 
         if is_player:
             move = self.get_move()
@@ -40,7 +35,8 @@ class Chessboard:
         else:
             # Joseph: your minimax will go here
 
-            move = MinimaxAgent.get_move(self, board= self.board)
+            move = self.minimaxagent.get_move()
+
             print("Computer makes move:", self.board.san(move))
             self.board.push(move)
             """

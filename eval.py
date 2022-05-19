@@ -9,18 +9,22 @@ PIECES = [
     chess.KING
 ]
 
-class Eval():
+
+class Eval:
+
     def __init__(self, input_board):
         self.board = input_board
         # Weighted according to chess.com
-        self.pieces_weights = [1, 3, 3, 5, 9, 1]
+        self.pieces_weights = [10, 30, 30, 50, 90, 900]
 
 
     # Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
-    #def simple_eval(self, player_color):
-    def evaluation_function(self, board, player_color):
-        count = 0
+    def simple_eval(self, player_color):
+        my_count = 0
+        opp_count = 0
         for i in range(len(PIECES)):
-            count += self.pieces_weights[i] * len(self.board.pieces(PIECES[i], player_color))
-        return count
+            my_count += self.pieces_weights[i] * len(self.board.pieces(PIECES[i], player_color))
+            opp_count += self.pieces_weights[i] * len(self.board.pieces(PIECES[i], not player_color))
+        return my_count - opp_count
+
 
