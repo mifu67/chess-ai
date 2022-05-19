@@ -35,17 +35,16 @@ class Chessboard:
         else:
             # Joseph: your minimax will go here
 
-            """
             move = self.minimaxagent.get_move()
 
             print("Computer makes move:", self.board.san(move))
             self.board.push(move)
-            """
-            legal_moves = self.board.legal_moves
-            move_list = list(legal_moves)
-            move = random.choice(move_list)
-            print("Computer makes move:", self.board.san(move))
-            self.board.push(move)
+
+            # legal_moves = self.board.legal_moves
+            # move_list = list(legal_moves)
+            # move = random.choice(move_list)
+            # print("Computer makes move:", self.board.san(move))
+            # self.board.push(move)
             
         self.display()
 

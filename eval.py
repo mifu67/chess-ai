@@ -98,8 +98,8 @@ class Eval:
         my_count = 0
         opp_count = 0
         for i in range(len(PIECES)):
-            my_count += PIECES_WEIGHTS * len(self.board.pieces(PIECES[i], player_color))
-            opp_count += PIECES_WEIGHTS * len(self.board.pieces(PIECES[i], not player_color))
+            my_count += PIECES_WEIGHTS[i] * len(self.board.pieces(PIECES[i], not player_color))
+            opp_count += PIECES_WEIGHTS[i] * len(self.board.pieces(PIECES[i], player_color))
         return my_count - opp_count
 
     # Based on Claude E. Shannon's "Programming a Computer for playing Chess" 1949
@@ -107,10 +107,10 @@ class Eval:
         # Count difference
         score = 0
         for i in range(len(PIECES)):
-            score += PIECES_WEIGHTS * (len(self.board.pieces(PIECES[i], player_color)) -
-                                       len(self.board.pieces(PIECES[i], not player_color)))
+            score += PIECES_WEIGHTS[i] * (len(self.board.pieces(PIECES[i], not player_color)) -
+                                       len(self.board.pieces(PIECES[i], player_color)))
         # Mobility measured by number of legal moves available
-        mobility = self.mobility_weight * (len(self.board.legal_moves))
+        mobility = self.mobility_weight * (len(list(self.board.legal_moves)))
 
         # Checks if board is currently in check
         check = self.check_weight * (1 if self.board.is_check() else 0)
