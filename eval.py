@@ -121,7 +121,8 @@ class Eval:
         score = 0
         
         for i in range(64):
-            piece = self.board.piece_at(i)
+            piece = self.board.piece_type_at(i)
+        
             if self.board.color_at(i) == chess.WHITE:
                 if piece == chess.PAWN:
                     score += pst_pawn[i]
@@ -135,6 +136,7 @@ class Eval:
                     score += pst_queen[i]
                 elif piece == chess.KING:
                     score += pst_king[i]
+
             elif self.board.color_at(i) == chess.BLACK:
                 if piece == chess.PAWN:
                     score -=pst_pawn[flip[i]]
@@ -148,6 +150,7 @@ class Eval:
                     score -= pst_queen[flip[i]]
                 elif piece == chess.KING:
                     score -= pst_king[flip[i]]
+                    
         return score if (player_color == chess.WHITE) else -score
 
         
