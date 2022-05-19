@@ -2,11 +2,13 @@ import chess
 from eval import Eval
 import math
 
+
 # minimax agent with alpha-beta pruning
 class MinimaxAgent:
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
+
     def __init__(self, player_color, board):
         # setting an arbitrary number for testing
         self.depth = 2
@@ -31,7 +33,6 @@ class MinimaxAgent:
             # we've bottomed out, so call the eval function
             elif currDepth == 0:
                 return self.evals.simple_eval(self.player_color)
-            
             # minimax
             else:
                 legalMoves = list(board.legal_moves)
@@ -51,7 +52,7 @@ class MinimaxAgent:
                     minValue = math.inf
                     for action in legalMoves:
                         board.push(action)
-                        value= alphaBeta(board, not isComputer, currDepth - 1, alpha, beta)
+                        value = alphaBeta(board, not isComputer, currDepth - 1, alpha, beta)
                         board.pop()
                         minValue = min(minValue, value)
                         if minValue <= alpha:
@@ -73,4 +74,6 @@ class MinimaxAgent:
                 maxValue = value
                 alpha = max(alpha, maxValue)
         print("maxValue ", maxValue)
+
         return maxAction
+
