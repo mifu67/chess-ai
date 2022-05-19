@@ -4,7 +4,6 @@ import chess
 
 # the chess game lives here
 def main():
-    board = Chessboard()
     # get the player's color
     white = True
     black = False
@@ -21,6 +20,8 @@ def main():
         else:
             val = input("Invalid input: please type 'white' or 'black'. ")
     print("")
+    player_color = chess.WHITE if white else chess.BLACK
+    board = Chessboard(player_color)
     board.display()
 
     # off to the races! 

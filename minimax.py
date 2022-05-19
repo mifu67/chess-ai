@@ -1,56 +1,82 @@
 import chess
 from eval import Eval
+import math
 
 # minimax agent with alpha-beta pruning
-
-#computer is 0, player is 1
-class MinimaxAgent():
+class MinimaxAgent:
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
-    def __init__(self):
+    def __init__(self, player_color, board):
+        # setting an arbitrary number for testing
+        self.depth = 2
+        self.board = board
         self.isComputer = True
-        #todo figure out a way to grab the player's color
-        self.playerColor = chess.WHITE
-        #self.evaluation_function = Eval.simple_eval(self, chess.WHITE)
+        self.player_color = player_color
+        self.evals = Eval(board)
 
-    def get_move(self, board):
+    def get_move(self):
         def alphaBeta(board, isComputer, currDepth, alpha, beta):
-            #todo figure out a way to check if chessboard is at the end
-            if Chessboard.is_end():
-                return Eval.evaluation_function(board, self.playerColor)
+            # print("Board alpha beta:")
+            # print(board)
+            if board.is_game_over():
+                outcome = board.outcome()
+                # if the computer won
+                if outcome.winner != self.player_color:
+                    return math.inf
+                # if the player won -> bad for computer
+                elif outcome.winner == self.player_color:
+                    return -math.inf
+                # stalemate
+                return 0
+
+            # we've bottomed out, so call the eval function
             elif currDepth == 0:
-                return Eval.evaluation_function(board, self.playerColor)
+                # print("evaluation:", self.evals.simple_eval(self.player_color))
+                return self.evals.simple_eval(self.player_color)
+            
+            # minimax
             else:
-                legalMoves = board.legal_moves
-                if self.isComputer:
-                    policy = ""
+                legalMoves = list(board.legal_moves)
+                if isComputer:
                     maxValue = -math.inf
                     for action in legalMoves:
-                        consideredValue = alphaBeta(board.generateSuccessor(0, action), not isComputer, currDepth, alpha, beta)[0]
-                        if consideredValue > maxValue:
-                            value = consideredValue
-                            policy = action
-                        alpha = max(alpha, value)
-                        if beta <= alpha:
-                            return (value, policy)
-                    #return the value and policy for the computer
-                    return (value, policy)
+                        # print("Move:", board.san(action))
+                        board.push(action)
+                        value = alphaBeta(board, not isComputer, currDepth, alpha, beta)
+                        # print("max considered:", value)
+                        board.pop()
+                        # print("Board after pop max:")
+                        # print(board)
+                        value = max(maxValue, value)
+                        if maxValue >= beta:
+                            break
+                    return maxValue
                 else:
-                    policy = ""
                     minValue = math.inf
                     for action in legalMoves:
-                        consideredValue = alphaBeta(board.generateSuccessor(1, action), not isComputer, currDepth, alpha,beta)[0]
-                        if consideredValue < minValue:
-                            value = consideredValue
-                            policy = action
-                        beta = min(beta, value)
-                        if beta <= alpha:
-                            return (value, policy)
-                    # return the value and policy for the player
-                    return (value, policy)
+                        # print("Move:", board.san(action))
+                        board.push(action)
+                        value= alphaBeta(board, not isComputer, currDepth - 1, alpha,beta)
+                        # print("min considered: ", value)
+                        board.pop()
+                        # print("Board after pop min:")
+                        # print(board)
+                        value = min(minValue, value)
+                        if minValue <= alpha:
+                            break
+                        beta = min(beta, minValue)
+                    return minValue
 
-        depth = 3
-        value, action = alphaBeta(board, True, depth, -float("inf"), float("inf"))
-        print(value)
-        return action
+        legalMoves = self.board.legal_moves
+        maxAction = ""
+        maxValue = -math.inf
+        alpha = -math.inf
+        beta = math.inf
+        for action in legalMoves:
+            value = alphaBeta(self.board, not self.isComputer, self.depth, alpha, beta)
+            if value > maxValue:
+                maxAction = action
+                maxValue = value
+                alpha = max(alpha, maxValue)
+        return maxAction
