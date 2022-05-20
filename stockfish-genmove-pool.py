@@ -68,25 +68,31 @@ class GenMoveStockFish:
 
 def main():
     genMoves = GenMoveStockFish("fenData")
-    
-    pool = multiprocessing.Pool()
-    result = []
-    try:
-        result = pool.map(genMoves.testMinimax, genMoves.fileNames)
-    except KeyboardInterrupt:
-        pool.terminate()
-        pool.join()
-    
-    print(result)
+    percentages = {}
+        
+    for n in range(4, 31, 2):
+        genMoves.numMovesGen = n
 
-    total_moves_matched = 0
-    final_fen_total = 0
-    
-    for (moves, fen_count) in result:
-        total_moves_matched += moves
-        final_fen_total += fen_count
-    
-    print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
+        pool = multiprocessing.Pool()
+        result = []
+        try:
+            result = pool.map(genMoves.testMinimax, genMoves.fileNames)
+        except KeyboardInterrupt:
+            pool.terminate()
+            pool.join()
+
+        total_moves_matched = 0
+        final_fen_total = 0
+        
+        for (moves, fen_count) in result:
+            total_moves_matched += moves
+            final_fen_total += fen_count
+        
+        print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
+
+        percentages[n] = float(total_moves_matched/final_fen_total * 100)
+
+    print(percentages)
     
 
 
