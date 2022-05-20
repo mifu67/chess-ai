@@ -72,7 +72,7 @@ def main():
     pool = multiprocessing.Pool()
     result = []
     try:
-        result = pool.map(genMoves.testMinimax, genMoves.fileNames[4:])
+        result = pool.map(genMoves.testMinimax, genMoves.fileNames)
     except KeyboardInterrupt:
         pool.terminate()
         pool.join()
@@ -86,7 +86,7 @@ def main():
         total_moves_matched += moves
         final_fen_total += fen_count
     
-    print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)))
+    print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
     
 
 
