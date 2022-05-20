@@ -9,6 +9,8 @@ PIECES = [
     chess.KING
 ]
 
+# All weights pulled from https://github.com/thomasahle/sunfish/blob/master/sunfish.py 
+
 PIECES_WEIGHTS = [100, 280, 320, 479, 929, 60000]
 
 pst_pawn = [0, 0, 0, 0, 0, 0, 0, 0,
@@ -91,9 +93,13 @@ class Eval:
         self.mobility_weight = 5
         self.check_weight = -10000
 
+    """
+    simple_eval
 
 
-    # Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
+    Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
+    Returns score based on number of pieces each player has times the corresponding weights
+    """
     def simple_eval(self, player_color):
         my_count = 0
         opp_count = 0
@@ -101,8 +107,14 @@ class Eval:
             my_count += PIECES_WEIGHTS[i] * len(self.board.pieces(PIECES[i], not player_color))
             opp_count += PIECES_WEIGHTS[i] * len(self.board.pieces(PIECES[i], player_color))
         return my_count - opp_count
-
-    # Based on Claude E. Shannon's "Programming a Computer for playing Chess" 1949
+    
+    """
+    symm_eval
+    Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
+    Returns score based on number of pieces for each player and relative weights, mobility,
+        whether or not board is in check
+    Based on Claude E. Shannon's "Programming a Computer for playing Chess" 1949
+    """
     def symm_eval(self, player_color):
         # Count difference
         score = 0
@@ -117,8 +129,16 @@ class Eval:
 
         return score + mobility + check
 
-    # Weighs pieces based on placement on board
-    # From https://github.com/emdio/secondchess/blob/master/secondchess.c
+
+    """
+    placement_eval
+    Param:: player_color - chess.COLOR of player, either chess.WHITE or chess.BLACK
+    Returns sum of weights of each piece depending on color and position on board
+    
+    Weighs pieces based on placement on board
+    Weights from https://github.com/thomasahle/sunfish/blob/master/sunfish.py
+    Eval function from https://github.com/emdio/secondchess/blob/master/secondchess.c
+    """
     def placement_eval(self, player_color):
         score = 0
         
@@ -153,7 +173,7 @@ class Eval:
                 elif piece == chess.KING:
                     score -= pst_king[flip[i]]
 
-        return score if (player_color == chess.WHITE) else -score
+        return -score if (player_color == chess.WHITE) else score
 
     def combined_eval(self, player_color):
         return self.symm_eval(player_color) + self.placement_eval(player_color)

@@ -34,7 +34,6 @@ class Chessboard:
             self.board.push(move)
         else:
             # Joseph: your minimax will go here
-
             move = self.minimaxagent.get_move()
 
             print("Computer makes move:", self.board.san(move))
