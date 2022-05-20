@@ -173,7 +173,7 @@ class Eval:
                 elif piece == chess.KING:
                     score -= pst_king[flip[i]]
 
-        return score if (player_color == chess.WHITE) else -score
+        return -score if (player_color == chess.WHITE) else score
 
     def combined_eval(self, player_color):
         return self.symm_eval(player_color) + self.placement_eval(player_color)
