@@ -53,11 +53,14 @@ class GenMoveStockFish:
                     stockfish.set_fen_position(fen.strip())
                     best_n_moves = stockfish.get_top_moves(self.numMovesGen)
 
+                    # unmatched_moves = self.numMovesGen
                     for move in best_n_moves:
                         #print("stockfish move = " + str(move))
                         if str(move['Move']) == str(minimax_move):
+                            # moves_matched += float(unmatched_moves / self.numMovesGen)
                             moves_matched += 1
                             break
+                        # unmatched_moves -= 1
                     #print("Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100)))
 
         #return "Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100))
@@ -71,6 +74,7 @@ def main():
     percentages = {}
         
     for n in range(4, 31, 2):
+        print("Testing numMovesGen = {num}".format(num = n))
         genMoves.numMovesGen = n
 
         pool = multiprocessing.Pool()
