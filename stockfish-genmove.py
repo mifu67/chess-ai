@@ -37,12 +37,12 @@ class GenMoveStockFish:
                         # Create chess board with fen
                         minimax_board = chess.Board(fen.strip())
                         # Predict next move with minimax
-                        player_color = chess.WHITE if fen_split[-5] == 'w' else chess.BLACK
+                        player_color = chess.BLACK if fen_split[-5] == 'w' else chess.WHITE
                         print(player_color)
                         minimax_agent = MinimaxAgent(player_color, minimax_board)
                         minimax_move = minimax_agent.get_move()
-                        print("minimax_move " + str(minimax_move))
-
+                        # print("minimax_move " + str(minimax_move))
+                        print("minimax_move " + minimax_board.san(minimax_move))
                         stockfish.set_fen_position(fen.strip())
                         best_n_moves = stockfish.get_top_moves(numMovesGen)
 
