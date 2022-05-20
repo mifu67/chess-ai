@@ -32,33 +32,35 @@ class GenMoveStockFish:
                     lines = pgn_file.readlines()
                     for fen in lines:
                         total_fen += 1
-
+                        print("Fen count {}".format(total_fen))
                         fen_split = fen.split(' ') 
                         # Create chess board with fen
                         minimax_board = chess.Board(fen.strip())
                         # Predict next move with minimax
                         player_color = chess.BLACK if fen_split[-5] == 'w' else chess.WHITE
-                        print(player_color)
+                        #print(player_color)
                         minimax_agent = MinimaxAgent(player_color, minimax_board)
                         minimax_move = minimax_agent.get_move()
-                        # print("minimax_move " + str(minimax_move))
-                        print("minimax_move " + minimax_board.san(minimax_move))
+                        #print("minimax_move " + str(minimax_move))
+                        #print("minimax_move " + minimax_board.san(minimax_move))
                         stockfish.set_fen_position(fen.strip())
                         best_n_moves = stockfish.get_top_moves(numMovesGen)
 
                         for move in best_n_moves:
-                            print("stockfish move = " + str(move))
-                            if move['Move'] == minimax_move:
+                            #print("stockfish move = " + str(move))
+                            if str(move['Move']) == str(minimax_move):
                                 moves_matched += 1
+                                break
+                        print("Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100)))
 
-        return "Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100))
+        return "Final Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100))
         
                         
 
 
 def main():
     genMoves = GenMoveStockFish("fenData")
-    print(genMoves.testMinimax(3))
+    print(genMoves.testMinimax(20))
     
 
 
