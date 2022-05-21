@@ -11,7 +11,7 @@ class GenMoveStockFish:
         self.directory = directory
         self.fileNames = []
         self.accuracy = 0
-        self.numMovesGen = 20
+        self.numMovesGen = 30
         self.listFolders()
         
     def listFolders(self):
@@ -31,8 +31,10 @@ class GenMoveStockFish:
     def testMinimax(self, filePath):
         stockfish = Stockfish(r'C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe')
 
+        #stockfish.set_depth(2)
+
         total_fen = 0
-        moves_matched = 0
+        moves_matched = [0] * int(self.numMovesGen / 2)
 
         if os.path.isfile(filePath):
             with open(filePath) as pgn_file:
@@ -45,60 +47,60 @@ class GenMoveStockFish:
                     minimax_board = chess.Board(fen.strip())
                     # Predict next move with minimax
                     player_color = chess.BLACK if fen_split[-5] == 'w' else chess.WHITE
-                    #print(player_color)
+                    # Gen minimax move
                     minimax_agent = MinimaxAgent(player_color, minimax_board)
                     minimax_move = minimax_agent.get_move()
                     #print("minimax_move " + str(minimax_move))
                     #print("minimax_move " + minimax_board.san(minimax_move))
+
+                    #Gen top moves Stockfish
                     stockfish.set_fen_position(fen.strip())
                     best_n_moves = stockfish.get_top_moves(self.numMovesGen)
+                    #print(len(best_n_moves))
 
-                    # unmatched_moves = self.numMovesGen
-                    for move in best_n_moves:
-                        #print("stockfish move = " + str(move))
-                        if str(move['Move']) == str(minimax_move):
-                            # moves_matched += float(unmatched_moves / self.numMovesGen)
-                            moves_matched += 1
-                            break
-                        # unmatched_moves -= 1
-                    #print("Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100)))
-
-        #return "Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100))
-        return (moves_matched, total_fen)
+                    # Extract match counts within top moves
+                    move_found = False
+                    for i in range(2, self.numMovesGen + 1, 2):
+                        if move_found:
+                            moves_matched[int((i-1)/2)] += 1
+                            continue
+                        for j in range (i-2, i):
+                            if j < len(best_n_moves):
+                                if str(best_n_moves[j]['Move']) == str(minimax_move):
+                                    # moves_matched += float(unmatched_moves / self.numMovesGen)
+                                    moves_matched[int((j)/2)] += 1
+                                    move_found = True
+                                    break
+                                    
+        return (moves_matched)
         
                         
 
 
 def main():
     genMoves = GenMoveStockFish("fenData")
-    percentages = {}
         
-    for n in range(4, 31, 2):
-        print("Testing numMovesGen = {num}".format(num = n))
-        genMoves.numMovesGen = n
+    print("Testing numMovesGen = {num}".format(num = genMoves.numMovesGen))
 
-        pool = multiprocessing.Pool()
-        result = []
-        try:
-            result = pool.map(genMoves.testMinimax, genMoves.fileNames)
-        except KeyboardInterrupt:
-            pool.terminate()
-            pool.join()
+    pool = multiprocessing.Pool()
+    result = []
+    try:
+        result = pool.map(genMoves.testMinimax, genMoves.fileNames)
+    except KeyboardInterrupt:
+        pool.terminate()
+        pool.join()
 
-        total_moves_matched = 0
-        final_fen_total = 0
-        
-        for (moves, fen_count) in result:
-            total_moves_matched += moves
-            final_fen_total += fen_count
-        
-        print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
-
-        percentages[n] = float(total_moves_matched/final_fen_total * 100)
-
-    print(percentages)
+    total_moves_matched = [0] * int(genMoves.numMovesGen / 2)
+    final_fen_total = 300
     
-
+    for i in range(len(total_moves_matched)):
+        for move_counts in result:
+            total_moves_matched[i] += move_counts[i]
+    
+    for  i in range(len(total_moves_matched)):
+        print("Moves Generated: {moves}".format(moves = (i+1)*2))
+        print("Accuracy: {percent}%".format(percent = float(total_moves_matched[i]/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
+    
 
 if __name__ == "__main__":
     main()
