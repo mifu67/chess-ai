@@ -33,6 +33,7 @@ class GenMoveStockFish:
 
         #stockfish.set_depth(2)
 
+
         total_fen = 0
         moves_matched = [0] * int(self.numMovesGen / 2)
 
@@ -56,6 +57,7 @@ class GenMoveStockFish:
                     #Gen top moves Stockfish
                     stockfish.set_fen_position(fen.strip())
                     best_n_moves = stockfish.get_top_moves(self.numMovesGen)
+
                     #print(len(best_n_moves))
 
                     # Extract match counts within top moves
@@ -67,10 +69,11 @@ class GenMoveStockFish:
                         for j in range (i-2, i):
                             if j < len(best_n_moves):
                                 if str(best_n_moves[j]['Move']) == str(minimax_move):
-                                    # moves_matched += float(unmatched_moves / self.numMovesGen)
+                                   
                                     moves_matched[int((j)/2)] += 1
                                     move_found = True
                                     break
+                        
                                     
         return (moves_matched)
         
