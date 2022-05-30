@@ -30,6 +30,8 @@ class GenMoveStockFish:
     """
     def testMinimax(self, filePath):
         stockfish = Stockfish(r'C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe')
+        stockfish.set_depth(15)
+
 
         total_fen = 0
         moves_matched = 0
@@ -53,18 +55,24 @@ class GenMoveStockFish:
                     stockfish.set_fen_position(fen.strip())
                     best_n_moves = stockfish.get_top_moves(self.numMovesGen)
 
-                    # unmatched_moves = self.numMovesGen
-                    for move in best_n_moves:
-                        #print("stockfish move = " + str(move))
-                        if str(move['Move']) == str(minimax_move):
-                            # moves_matched += float(unmatched_moves / self.numMovesGen)
-                            moves_matched += 1
-                            break
-                        # unmatched_moves -= 1
-                    #print("Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100)))
+                    #print(len(best_n_moves))
 
-        #return "Accuracy: {percent}%".format(percent = float(moves_matched/total_fen * 100))
-        return (moves_matched, total_fen)
+                    # Extract match counts within top moves
+                    move_found = False
+                    for i in range(2, self.numMovesGen + 1, 2):
+                        if move_found:
+                            moves_matched[int((i-1)/2)] += 1
+                            continue
+                        for j in range (i-2, i):
+                            if j < len(best_n_moves):
+                                if str(best_n_moves[j]['Move']) == str(minimax_move):
+                                   
+                                    moves_matched[int((j)/2)] += 1
+                                    move_found = True
+                                    break
+                        
+                                    
+        return (moves_matched)
         
                         
 
