@@ -29,7 +29,7 @@ class GenMoveStockFish:
     Returns float percentage of moves minimax guesses correctly from numMovesGen top moves predicted by StockFish
     """
     def testMinimax(self, filePath):
-        stockfish = Stockfish(r'C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe')
+        stockfish = Stockfish()
 
         total_fen = 0
         moves_matched = 0
