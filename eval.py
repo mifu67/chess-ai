@@ -172,7 +172,7 @@ class Eval:
                     score -= pst_queen[flip[i]]
                 elif piece == chess.KING:
                     score -= pst_king[flip[i]]
-
+        
         return -score if (player_color == chess.WHITE) else score
 
     def combined_eval(self, player_color):

@@ -9,7 +9,7 @@ class MinimaxAgent:
     """
     def __init__(self, player_color, board):
         # setting an arbitrary number for testing
-        self.depth = 2
+        self.depth = 3
         self.board = board
         self.isComputer = True
         self.player_color = player_color
@@ -32,8 +32,8 @@ class MinimaxAgent:
 
             # we've bottomed out, so call the eval function
             elif currDepth == 0:
-
-                return self.evals.combined_eval(self.player_color)
+                # print("Evaluation:", self.evals.placement_eval(self.player_color))
+                return self.evals.placement_eval(self.player_color)
 
             # minimax
             else:
@@ -48,7 +48,7 @@ class MinimaxAgent:
                         board.pop()
                         # print("Board after pop max:")
                         # print(board)
-                        value = max(maxValue, value)
+                        maxValue = max(maxValue, value)
                         if maxValue >= beta:
                             break
                         alpha = max(alpha, maxValue)
@@ -57,18 +57,19 @@ class MinimaxAgent:
                 else:
                     minValue = math.inf
                     for action in legalMoves:
-                        # print("Move:", board.san(action))
+                        # print("Minimizer move:", board.san(action))
                         board.push(action)
                         value= alphaBeta(board, not isComputer, currDepth - 1, alpha,beta)
                         # print("min considered: ", value)
                         board.pop()
                         # print("Board after pop min:")
                         # print(board)
-                        value = min(minValue, value)
+                        minValue = min(minValue, value)
                         if minValue <= alpha:
                             break
                         beta = min(beta, minValue)
                         #print("beta ", beta)
+                    # print("min value:", minValue)
                     return minValue
 
         #beginning of get_moves
@@ -78,9 +79,13 @@ class MinimaxAgent:
         alpha = -math.inf
         beta = math.inf
         for action in legalMoves:
+            # print("Maximizer move:", self.board.san(action))
+            self.board.push(action)
             value = alphaBeta(self.board, not self.isComputer, self.depth, alpha, beta)
+            self.board.pop()
             if value > maxValue:
                 maxAction = action
+                # print("new max value:", value)
                 maxValue = value
                 # if alpha == float("inf"):
                     # print("infinite alpha found")
