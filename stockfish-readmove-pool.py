@@ -36,8 +36,8 @@ class GenMoveStockFish:
     Returns float percentage of moves minimax guesses correctly from numMovesGen top moves predicted by StockFish
     """
     def testMinimax(self, fenMovePair):
-        stockfish = Stockfish(r"C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe")
-        stockfish.set_depth(2)
+        # stockfish = Stockfish(r"C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe")
+        # stockfish.set_depth(2)
 
         fenFilePath, moveFilePath = fenMovePair
 
@@ -70,7 +70,6 @@ class GenMoveStockFish:
             minimax_move = minimax_agent.get_move()
 
             best_n_moves = moves.split(' ')
-            print(best_n_moves)
 
             move_found = False
             for i in range(2, self.numMovesGen + 1, 2):
@@ -99,7 +98,6 @@ def main():
     for i in range(len(readFiles)):
         fenMoveFilePairs.append((genMoves.fileNames[i], readFiles[i]))
     
-    print(fenMoveFilePairs)
     
     print("Testing numMovesGen = {num}".format(num = genMoves.numMovesGen))
 

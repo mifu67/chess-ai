@@ -8,7 +8,7 @@ class MinimaxAgent:
       Returns the minimax action using self.depth and self.evaluationFunction
     """
     def __init__(self, player_color, board):
-        self.depth = 2
+        self.depth = 3
         self.board = board
         self.isComputer = True
         self.player_color = player_color
