@@ -84,9 +84,11 @@ flip = [
 ]
 
 
+#attack weights taken from Ojaswy AI Chess
+#these weights help in evaluating the value of using each piece to attack
+
+ATTACK_WEIGHTS = [1, 3, 4, 5, 10, 20]
 class Eval:
-
-
     def __init__(self, input_board):
         self.board = input_board
 
@@ -128,7 +130,6 @@ class Eval:
         check = self.check_weight * (1 if self.board.is_check() else 0)
 
         return score + mobility + check
-
 
     """
     placement_eval
@@ -179,5 +180,43 @@ class Eval:
         return self.symm_eval(player_color) + self.placement_eval(player_color)
 
 
+    #this evaluation function adds a param to add value based on which piece is attacking
+    def attacker_eval(self, player_color):
+        score = 0
+        white_attackers = self.board.attackers(chess.WHITE)
+        black_attackers = self.board.attackers(chess.BLACK)
+        for i in range(64):
+            piece = self.board.piece_type_at(i)
+
+            #check if piece is attacking something
+            if piece in white_attackers:
+                if piece == chess.PAWN:
+                    score += ATTACK_WEIGHTS[0]
+                elif piece == chess.KNIGHT:
+                    score += ATTACK_WEIGHTS[1]
+                elif piece == chess.BISHOP:
+                    score += ATTACK_WEIGHTS[2]
+                elif piece == chess.ROOK:
+                    score += ATTACK_WEIGHTS[3]
+                elif piece == chess.QUEEN:
+                    score += ATTACK_WEIGHTS[5]
+                elif piece == chess.KING:
+                    score += ATTACK_WEIGHTS[6]
+
+            elif piece in black_attackers:
+                if piece == chess.PAWN:
+                    score -= ATTACK_WEIGHTS[0]
+                elif piece == chess.KNIGHT:
+                    score -= ATTACK_WEIGHTS[1]
+                elif piece == chess.BISHOP:
+                    score -= ATTACK_WEIGHTS[2]
+                elif piece == chess.ROOK:
+                    score -= ATTACK_WEIGHTS[3]
+                elif piece == chess.QUEEN:
+                    score -= ATTACK_WEIGHTS[5]
+                elif piece == chess.KING:
+                    score -= ATTACK_WEIGHTS[6]
+
+        return -score if (player_color == chess.WHITE) else score
 
 
