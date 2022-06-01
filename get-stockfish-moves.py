@@ -4,7 +4,7 @@ import os
 NUM_MOVES = 30 
 
 def main():
-    stockfish = Stockfish()
+    stockfish = Stockfish(r"C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe")
     directory = "fenData"
     
     with open('stockfish-moves.txt', 'a') as f:
@@ -26,6 +26,7 @@ def main():
                         moves_string += move['Move'] + " "
                     print(moves_string)
                     moves_string += '\n'
+
                     
                     with open('stockfish-moves.txt', 'a') as f:
                         f.write(moves_string)

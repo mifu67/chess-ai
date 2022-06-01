@@ -13,6 +13,7 @@ class GenMoveStockFish:
         self.accuracy = 0
         self.numMovesGen = 30
         self.listFolders()
+
         
     def listFolders(self):
          for fileName in os.listdir(self.directory):
@@ -27,8 +28,8 @@ class GenMoveStockFish:
     Returns float percentage of moves minimax guesses correctly from numMovesGen top moves predicted by StockFish
     """
     def testMinimax(self, filePath):
-        stockfish = Stockfish()
-        stockfish.set_depth(15)
+        stockfish = Stockfish(r"C:\Users\Daniela Uribe\Documents\Stanford\CS221\stockfish-11-win\Windows\stockfish_20011801_x64.exe")
+        stockfish.set_depth(2)
 
 
         total_fen = 0
@@ -53,7 +54,7 @@ class GenMoveStockFish:
                     stockfish.set_fen_position(fen.strip())
                     best_n_moves = stockfish.get_top_moves(self.numMovesGen)
 
-                    #print(len(best_n_moves))
+                    print(best_n_moves)
 
                     # Extract match counts within top moves
                     move_found = False
@@ -76,34 +77,28 @@ class GenMoveStockFish:
 
 
 def main():
-    genMoves = GenMoveStockFish("fenData")
-    percentages = {}
-        
-    for n in range(4, 31, 2):
-        print("Testing numMovesGen = {num}".format(num = n))
-        genMoves.numMovesGen = n
-
-        pool = multiprocessing.Pool()
-        result = []
-        try:
-            result = pool.map(genMoves.testMinimax, genMoves.fileNames)
-        except KeyboardInterrupt:
-            pool.terminate()
-            pool.join()
-
-        total_moves_matched = 0
-        final_fen_total = 0
-        
-        for (moves, fen_count) in result:
-            total_moves_matched += moves
-            final_fen_total += fen_count
-        
-        print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
-
-        percentages[n] = float(total_moves_matched/final_fen_total * 100)
-
-    print(percentages)
+    genMoves = GenMoveStockFish("fenData")        
     
+    print("Testing numMovesGen = {num}".format(num = genMoves.numMovesGen))
+
+    pool = multiprocessing.Pool()
+    result = []
+    try:
+        result = pool.map(genMoves.testMinimax, genMoves.fileNames)
+    except KeyboardInterrupt:
+        pool.terminate()
+        pool.join()
+
+    total_moves_matched = [0] * int(genMoves.numMovesGen / 2)
+    final_fen_total = 300
+    
+    for i in range(len(total_moves_matched)):
+        for move_counts in result:
+            total_moves_matched[i] += move_counts[i]
+    
+    for  i in range(len(total_moves_matched)):
+        print("Moves Generated: {moves}".format(moves = (i+1)*2))
+        print("Accuracy: {percent}%".format(percent = float(total_moves_matched[i]/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
 
 
 if __name__ == "__main__":
