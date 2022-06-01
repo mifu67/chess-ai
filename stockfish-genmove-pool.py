@@ -21,17 +21,14 @@ class GenMoveStockFish:
 
     """
     testMinimax
-
     Param: numMovesGen- int number of top moves to generate with StockFish
-
     Tests minimax move prediction against StockFish. StockFish will generate numMovesGen top moves
     to compare to minimax's prediction. Outputs the percentage correct for all fen board arrangements.
     Returns float percentage of moves minimax guesses correctly from numMovesGen top moves predicted by StockFish
     """
     def testMinimax(self, filePath):
         stockfish = Stockfish()
-
-        #stockfish.set_depth(2)
+        stockfish.set_depth(15)
 
 
         total_fen = 0
@@ -48,13 +45,11 @@ class GenMoveStockFish:
                     minimax_board = chess.Board(fen.strip())
                     # Predict next move with minimax
                     player_color = chess.BLACK if fen_split[-5] == 'w' else chess.WHITE
-                    # Gen minimax move
+                    #print(player_color)
                     minimax_agent = MinimaxAgent(player_color, minimax_board)
                     minimax_move = minimax_agent.get_move()
                     #print("minimax_move " + str(minimax_move))
                     #print("minimax_move " + minimax_board.san(minimax_move))
-
-                    #Gen top moves Stockfish
                     stockfish.set_fen_position(fen.strip())
                     best_n_moves = stockfish.get_top_moves(self.numMovesGen)
 
@@ -82,28 +77,34 @@ class GenMoveStockFish:
 
 def main():
     genMoves = GenMoveStockFish("fenData")
+    percentages = {}
         
-    print("Testing numMovesGen = {num}".format(num = genMoves.numMovesGen))
+    for n in range(4, 31, 2):
+        print("Testing numMovesGen = {num}".format(num = n))
+        genMoves.numMovesGen = n
 
-    pool = multiprocessing.Pool()
-    result = []
-    try:
-        result = pool.map(genMoves.testMinimax, genMoves.fileNames)
-    except KeyboardInterrupt:
-        pool.terminate()
-        pool.join()
+        pool = multiprocessing.Pool()
+        result = []
+        try:
+            result = pool.map(genMoves.testMinimax, genMoves.fileNames)
+        except KeyboardInterrupt:
+            pool.terminate()
+            pool.join()
 
-    total_moves_matched = [0] * int(genMoves.numMovesGen / 2)
-    final_fen_total = 300
+        total_moves_matched = 0
+        final_fen_total = 0
+        
+        for (moves, fen_count) in result:
+            total_moves_matched += moves
+            final_fen_total += fen_count
+        
+        print("Accuracy: {percent}%".format(percent = float(total_moves_matched/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
+
+        percentages[n] = float(total_moves_matched/final_fen_total * 100)
+
+    print(percentages)
     
-    for i in range(len(total_moves_matched)):
-        for move_counts in result:
-            total_moves_matched[i] += move_counts[i]
-    
-    for  i in range(len(total_moves_matched)):
-        print("Moves Generated: {moves}".format(moves = (i+1)*2))
-        print("Accuracy: {percent}%".format(percent = float(total_moves_matched[i]/final_fen_total * 100)) if final_fen_total else "Fen Total is zero")
-    
+
 
 if __name__ == "__main__":
     main()
