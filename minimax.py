@@ -7,12 +7,14 @@ class MinimaxAgent:
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
-    def __init__(self, player_color, board):
-        self.depth = 3
+    def __init__(self, player_color, board, eval, quiesce):
+        self.depth = 2
         self.board = board
         self.isComputer = True
         self.player_color = player_color
         self.evals = Eval(board)
+        self.eval = eval
+        self.quiesce_on = quiesce
     
     # order moves so that alpha-beta search is more likely to be effective
     def order_moves(self, movelist):
@@ -23,9 +25,23 @@ class MinimaxAgent:
 
     # pseudocode source: https://www.researchgate.net/figure/Abstract-Pseudo-Code-Version-for-Quiescence-Search-Forward-Pruning-technique-completes_fig6_262672371
     # to prevent the horizon effect, search until the position becomes "quiet" and there are no 
-    # captures available
-    def quiesce(self, alpha, beta, board):
-        eval = self.evals.simple_eval(self.player_color)
+    # captures available (slightly modified to limit depth so that evaluation doesn't stall)
+    def quiesce(self, alpha, beta, board, depth):
+        if self.eval == "simple":
+            eval = self.evals.simple_eval(self.player_color)
+        elif self.eval == "placement":
+            eval = self.evals.placement_eval(self.player_color)
+        elif self.eval == "symm":
+            eval = self.evals.symm_eval(self.player_color)
+        elif self.eval == "attack":
+            eval = self.evals.attacker_eval(self.player_color)
+        elif self.eval == "combined":
+            eval = self.evals.combined_eval(self.player_color)
+
+        # depth-limited quiescense 
+        if depth == 0:
+            return eval
+
         if eval >= beta:
             return beta
         if alpha < eval:
@@ -34,7 +50,7 @@ class MinimaxAgent:
         for move in board.legal_moves:
             if board.is_capture(move):
                 board.push(move)
-                score = -self.quiesce(-beta, -alpha, board)
+                score = -self.quiesce(-beta, -alpha, board, depth - 1)
                 board.pop()
             
                 if score >= beta:
@@ -57,10 +73,23 @@ class MinimaxAgent:
                 # stalemate
                 return 0
 
-            # we've bottomed out, so call the eval function
+            # we've bottomed out, so call the eval function/quiesce
             elif currDepth == 0:
-                # return self.evals.simple_eval(self.player_color)
-                return self.quiesce(alpha, beta, board)
+                if self.quiesce_on:
+                    return self.quiesce(alpha, beta, board, 3)
+                eval = 0
+                if self.eval == "simple":
+                    eval = self.evals.simple_eval(self.player_color)
+                elif self.eval == "placement":
+                    eval = self.evals.placement_eval(self.player_color)
+                elif self.eval == "symm":
+                    eval = self.evals.symm_eval(self.player_color)
+                elif self.eval == "attack":
+                    eval = self.evals.attacker_eval(self.player_color)
+                elif self.eval == "combined":
+                    eval = self.evals.combined_eval(self.player_color)
+                return eval
+
 
             # minimax
             else:

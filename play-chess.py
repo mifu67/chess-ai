@@ -20,9 +20,27 @@ def main():
             break
         else:
             val = input("Invalid input: please type 'white' or 'black'. ")
+    eval = input("Enter and evaluation function: simple, symm, placement, attack, or combined. ")
+    while True:
+        if eval != "simple" and eval != "symm" and eval != "placement" and eval != "combined" and eval != "attack":
+            eval = input("Please enter a valid evaluation function.")
+        else:
+            break
+    quiesce = False
+    quiesce_val = input("Do you want to enable quiescence search? Type 'yes' or 'no'. ")
+    while True:
+        if quiesce_val == 'yes':
+            quiesce = True
+            break
+        if quiesce_val == 'no':
+            break
+        else:
+            quiesce_val = input("Please enter 'yes' or 'no'. ")
+    print("Let's get started!")
     print("")
+
     player_color = chess.WHITE if white else chess.BLACK
-    board = Chessboard(player_color)
+    board = Chessboard(player_color, eval, quiesce)
     board.display()
 
     # off to the races! 
