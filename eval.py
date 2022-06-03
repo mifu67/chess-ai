@@ -183,9 +183,24 @@ class Eval:
     #this evaluation function adds a param to add value based on which piece is attacking
     def attacker_eval(self, player_color):
         score = 0
-        white_attackers = self.board.attackers(chess.WHITE)
-        black_attackers = self.board.attackers(chess.BLACK)
-        for i in range(64):
+        #white_attackers = self.board.attackers(chess.WHITE)
+        #black_attackers = self.board.attackers(chess.BLACK)
+
+        cols = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
+
+        totalWhiteAttacks = 0
+        totalBlackAttackers = 0
+        for col in cols:
+            for row in rows:
+                square = str(col) + str(row)
+                method = getattr(chess, square)
+                whiteAttackers = self.board.attackers(chess.WHITE, method())
+                blackAttackers = self.board.attackers(chess.WHITE, method())
+                totalWhiteAttacks += len(whiteAttackers)
+                totalBlackAttackers += len(blackAttackers)
+                """
+        #for i in range(64):
             piece = self.board.piece_type_at(i)
 
             #check if piece is attacking something
@@ -216,7 +231,8 @@ class Eval:
                     score -= ATTACK_WEIGHTS[5]
                 elif piece == chess.KING:
                     score -= ATTACK_WEIGHTS[6]
-
-        return -score if (player_color == chess.WHITE) else score
+                    """""
+        score = totalWhiteAttacks - totalBlackAttackers
+        return score if (player_color == chess.WHITE) else -score
 
 
