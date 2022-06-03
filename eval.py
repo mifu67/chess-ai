@@ -12,6 +12,7 @@ PIECES = [
 # All weights pulled from https://github.com/thomasahle/sunfish/blob/master/sunfish.py 
 
 PIECES_WEIGHTS = [100, 280, 320, 479, 929, 60000]
+BASELINE_WEIGHTS = [1, 3, 3, 5, 9, 100]
 
 pst_pawn = [0, 0, 0, 0, 0, 0, 0, 0,
             78, 83, 86, 73, 102, 82, 85, 90,
@@ -177,7 +178,7 @@ class Eval:
         return -score if (player_color == chess.WHITE) else score
 
     def combined_eval(self, player_color):
-        return self.symm_eval(player_color) + self.placement_eval(player_color)
+        return self.symm_eval(player_color) + self.placement_eval(player_color) 
 
 
     #this evaluation function adds a param to add value based on which piece is attacking

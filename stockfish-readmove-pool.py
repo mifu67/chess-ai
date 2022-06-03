@@ -4,15 +4,18 @@ from genfen import GenerateFen
 import chess
 from minimax import MinimaxAgent
 import os
+import sys
 
 
 class GenMoveStockFish:
-    def __init__(self, directory):
+    def __init__(self, directory, eval):
         self.directory = directory
         self.fileNames = []
         self.accuracy = 0
         self.numMovesGen = 30
         self.getFileNames()
+        self.eval = eval
+        print(self.eval)
 
         
     def getFileNames(self):
@@ -63,7 +66,7 @@ class GenMoveStockFish:
             # Predict next move with minimax
             player_color = chess.BLACK if fen_split[-5] == 'w' else chess.WHITE
             #print(player_color)
-            minimax_agent = MinimaxAgent(player_color, minimax_board)
+            minimax_agent = MinimaxAgent(player_color, minimax_board, self.eval)
             minimax_move = minimax_agent.get_move()
 
             best_n_moves = moves.split(' ')
@@ -88,14 +91,14 @@ class GenMoveStockFish:
 
 
 def main():
-    genMoves = GenMoveStockFish("fenData")    
+    genMoves = GenMoveStockFish("fenData", sys.argv[1])    
     readFiles = genMoves.listFilesInFolder("StockfishMoves")  
 
     fenMoveFilePairs = []
     for i in range(len(readFiles)):
         fenMoveFilePairs.append((genMoves.fileNames[i], readFiles[i]))
     
-    
+    print("eval =", sys.argv[1])
     print("Testing numMovesGen = {num}".format(num = genMoves.numMovesGen))
 
     pool = multiprocessing.Pool()

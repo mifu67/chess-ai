@@ -13,9 +13,9 @@ PIECES = {
 }
 
 class Chessboard:
-    def __init__(self, player_color, eval, quiesce):
+    def __init__(self, player_color, eval):
         self.board = chess.Board()
-        self.minimaxagent = MinimaxAgent(player_color, self.board, eval, quiesce)
+        self.minimaxagent = MinimaxAgent(player_color, self.board, eval)
         self.player_color = player_color
     
     # print out the board

@@ -7,14 +7,14 @@ class MinimaxAgent:
     """
       Returns the minimax action using self.depth and self.evaluationFunction
     """
-    def __init__(self, player_color, board, eval, quiesce):
+    def __init__(self, player_color, board, eval):
         self.depth = 2
         self.board = board
         self.isComputer = True
         self.player_color = player_color
         self.evals = Eval(board)
         self.eval = eval
-        self.quiesce_on = quiesce
+        self.quiesce_on = False
     
     # order moves so that alpha-beta search is more likely to be effective
     def order_moves(self, movelist):
@@ -75,8 +75,9 @@ class MinimaxAgent:
 
             # we've bottomed out, so call the eval function/quiesce
             elif currDepth == 0:
-                if self.quiesce_on:
+                if self.quiesce_on == True:
                     return self.quiesce(alpha, beta, board, 3)
+
                 eval = 0
                 if self.eval == "simple":
                     eval = self.evals.simple_eval(self.player_color)
@@ -94,6 +95,7 @@ class MinimaxAgent:
             # minimax
             else:
                 legalMoves = self.order_moves(list(board.legal_moves))
+                # legalMoves = board.legal_moves
                 if isComputer:
                     maxValue = -math.inf
                     for action in legalMoves:
@@ -121,6 +123,7 @@ class MinimaxAgent:
                     return minValue
 
         legalMoves = self.order_moves(list(self.board.legal_moves))
+        # legalMoves = self.board.legal_moves
         maxAction = ""
         maxValue = -math.inf
         alpha = -math.inf
