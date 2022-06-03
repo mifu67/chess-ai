@@ -10,6 +10,5 @@ Pick your color and pick your evaluation function by following the prompts in th
 4. combined: symm + placement (does everything, basically)
 
 A couple notes:
-- There could be a bug for you in the endgame where the program crashes when victory is near, due to a bug in the python-chess module. Rest assured that you were probably about to win.
 - You can change the depth in minimax.py if you're feeling adventurous, but it'll get very slow at depths above 3.
 - The board will always be shown from white's perspective, so apologies if you're playing black.
