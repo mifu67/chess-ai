@@ -123,14 +123,12 @@ class MinimaxAgent:
                     return minValue
 
         legalMoves = self.order_moves(list(self.board.legal_moves))
-        print(legalMoves)
         # legalMoves = self.board.legal_moves
         maxAction = legalMoves[0]
         maxValue = -math.inf
         alpha = -math.inf
         beta = math.inf
         for action in legalMoves:
-            print(action)
             self.board.push(action)
             value = alphaBeta(self.board, not self.isComputer, self.depth, alpha, beta)
             self.board.pop()
@@ -139,7 +137,5 @@ class MinimaxAgent:
                 maxAction = action
                 maxValue = value
                 alpha = max(alpha, maxValue)
-        print("max action:", maxAction)
-        print("SAN:", self.board.san(maxAction))
 
         return maxAction
